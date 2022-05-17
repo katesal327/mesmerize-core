@@ -417,61 +417,61 @@ def test_cnmfe():
             f'{df.iloc[-1]["uuid"]}_pn.npy')
 
 
-# def test_remove_item():
-#     set_parent_data_path(vid_dir)
-#     algo = 'mcorr'
-#     df, batch_path = _create_tmp_batch()
-#     print(f"Testing mcorr")
-#     input_movie_path = get_datafile(algo)
-#     print(input_movie_path)
-#     df.caiman.add_item(
-#         algo=algo,
-#         name=f'test-{algo}',
-#         input_movie_path=input_movie_path,
-#         params=test_params[algo]
-#     )
+def test_remove_item():
+    set_parent_data_path(vid_dir)
+    algo = 'mcorr'
+    df, batch_path = _create_tmp_batch()
+    print(f"Testing mcorr")
+    input_movie_path = get_datafile(algo)
+    print(input_movie_path)
+    df.caiman.add_item(
+        algo=algo,
+        name=f'test-{algo}',
+        input_movie_path=input_movie_path,
+        params=test_params[algo]
+    )
 
-#     assert df.iloc[-1]['algo'] == algo
-#     assert df.iloc[-1]['name'] == f'test-{algo}'
-#     assert df.iloc[-1]['params'] == test_params[algo]
-#     assert df.iloc[-1]['outputs'] is None
-#     try:
-#         UUID(df.iloc[-1]['uuid'])
-#     except:
-#         pytest.fail("Something wrong with setting UUID for batch items")
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test-{algo}'
+    assert df.iloc[-1]['params'] == test_params[algo]
+    assert df.iloc[-1]['outputs'] is None
+    try:
+        UUID(df.iloc[-1]['uuid'])
+    except:
+        pytest.fail("Something wrong with setting UUID for batch items")
 
-#     assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
-#                   vid_dir.joinpath(f"{algo}.tif") == \
-#                   vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
+    assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
+                  vid_dir.joinpath(f"{algo}.tif") == \
+                  vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
 
-#     df.caiman.add_item(
-#         algo=algo,
-#         name=f'test1-{algo}',
-#         input_movie_path=input_movie_path,
-#         params=test_params[algo]
-#     )
+    df.caiman.add_item(
+        algo=algo,
+        name=f'test1-{algo}',
+        input_movie_path=input_movie_path,
+        params=test_params[algo]
+    )
 
-#     assert df.iloc[-1]['algo'] == algo
-#     assert df.iloc[-1]['name'] == f'test1-{algo}'
-#     assert df.iloc[-1]['params'] == test_params[algo]
-#     assert df.iloc[-1]['outputs'] is None
-#     try:
-#         UUID(df.iloc[-1]['uuid'])
-#     except:
-#         pytest.fail("Something wrong with setting UUID for batch items")
+    assert df.iloc[-1]['algo'] == algo
+    assert df.iloc[-1]['name'] == f'test1-{algo}'
+    assert df.iloc[-1]['params'] == test_params[algo]
+    assert df.iloc[-1]['outputs'] is None
+    try:
+        UUID(df.iloc[-1]['uuid'])
+    except:
+        pytest.fail("Something wrong with setting UUID for batch items")
 
-#     assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
-#                   vid_dir.joinpath(f"{algo}.tif") == \
-#                   vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
-#     # Check removing specific rows works
-#     assert df.iloc[0]['name'] == f'test-{algo}'
-#     assert df.iloc[1]['name'] == f'test1-{algo}'
-#     assert df.empty == False
-#     df.caiman.remove_item(index = 1)
-#     assert df.iloc[0]['name'] == f'test-{algo}'
-#     assert df.isin([f'test1-{algo}']).any().any() == False
-#     assert df.empty == False
-#     df.caiman.remove_item(index=0)
-#     assert df.isin([f'test-{algo}']).any().any() == False
-#     assert df.isin([f'test1-{algo}']).any().any() == False
-#     assert df.empty == True
+    assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
+                  vid_dir.joinpath(f"{algo}.tif") == \
+                  vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
+    # Check removing specific rows works
+    assert df.iloc[0]['name'] == f'test-{algo}'
+    assert df.iloc[1]['name'] == f'test1-{algo}'
+    assert df.empty == False
+    df.caiman.remove_item(index = 1)
+    assert df.iloc[0]['name'] == f'test-{algo}'
+    assert df.isin([f'test1-{algo}']).any().any() == False
+    assert df.empty == False
+    df.caiman.remove_item(index=0)
+    assert df.isin([f'test-{algo}']).any().any() == False
+    assert df.isin([f'test1-{algo}']).any().any() == False
+    assert df.empty == True
