@@ -144,7 +144,7 @@ def test_mcorr():
     #projections
     #correlations
 
-    # test ti check mmap output path
+    # test to check mmap output path
     assert vid_dir.joinpath(df.iloc[-1]['outputs']['mcorr-output-path']
                         ) == \
         get_full_data_path(df.iloc[-1]['outputs']['mcorr-output-path']
@@ -254,16 +254,43 @@ def test_cnmf():
     # Confirm output path is as expected
     assert df.iloc[-1]['outputs']['success'] is True
     assert df.iloc[-1]['outputs']['traceback'] is None
+    
+
+    assert vid_dir.joinpath(
+        f'{df.iloc[-1]["uuid"]}.hdf5') == \
+        get_full_data_path(df.iloc[-1]['outputs']['cnmf-hdf5-path']) == \
+        vid_dir.joinpath(df.iloc[-1]['outputs']['cnmf-hdf5-path'])
+
+    # test to check mmap output path
     assert vid_dir.joinpath(
         f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_60_d2_80_d3_1_order_C_frames_2000_.mmap') == \
            get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path']) == \
           vid_dir.joinpath(df.iloc[-1]['outputs']['cnmf-memmap-path']
                        )
 
-    assert vid_dir.joinpath(
-        f'{df.iloc[-1]["uuid"]}.hdf5') == \
-        get_full_data_path(df.iloc[-1]['outputs']['cnmf-hdf5-path']) == \
-        vid_dir.joinpath(df.iloc[-1]['outputs']['cnmf-hdf5-path'])
+    # test to check mean-projection output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['mean-projection-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['mean-projection-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_mean.npy')
+
+    # test to check std-projection output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['std-projection-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['std-projection-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_std.npy')
+
+    # test to check max-projection output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['max-projection-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['max-projection-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_max.npy') 
+
+    # test to check correlation image output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['corr-img-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['corr-img-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_cn.npy')
 
 
 def test_cnmfe():
@@ -351,63 +378,100 @@ def test_cnmfe():
         get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path'])
     assert vid_dir.joinpath(f'{df.iloc[-1]["uuid"]}.hdf5') == \
         get_full_data_path(df.iloc[-1]['outputs']['cnmf-hdf5-path'])
+    
+    # test to check mmap output path
+    assert vid_dir.joinpath(
+        f'{df.iloc[-1]["uuid"]}_cnmf-memmap__d1_60_d2_80_d3_1_order_C_frames_2000_.mmap') == \
+           get_full_data_path(df.iloc[-1]['outputs']['cnmf-memmap-path']) == \
+          vid_dir.joinpath(df.iloc[-1]['outputs']['cnmf-memmap-path']
+                       )
+
+    # test to check mean-projection output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['mean-projection-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['mean-projection-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_mean.npy')
+
+    # test to check std-projection output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['std-projection-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['std-projection-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_std.npy')
+
+    # test to check max-projection output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['max-projection-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['max-projection-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_max.npy') 
+
+    # test to check correlation image output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['corr-img-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['corr-img-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_cn.npy')
+    
+    # test to check pnr image output path
+    assert vid_dir.joinpath(df.iloc[-1]['outputs']['pnr-image-path']) == \
+        get_full_data_path(df.iloc[-1]['outputs']['pnr-image-path']) == \
+        vid_dir.joinpath(
+            f'{df.iloc[-1]["uuid"]}_pn.npy')
 
 
-def test_remove_item():
-    set_parent_data_path(vid_dir)
-    algo = 'mcorr'
-    df, batch_path = _create_tmp_batch()
-    print(f"Testing mcorr")
-    input_movie_path = get_datafile(algo)
-    print(input_movie_path)
-    df.caiman.add_item(
-        algo=algo,
-        name=f'test-{algo}',
-        input_movie_path=input_movie_path,
-        params=test_params[algo]
-    )
+# def test_remove_item():
+#     set_parent_data_path(vid_dir)
+#     algo = 'mcorr'
+#     df, batch_path = _create_tmp_batch()
+#     print(f"Testing mcorr")
+#     input_movie_path = get_datafile(algo)
+#     print(input_movie_path)
+#     df.caiman.add_item(
+#         algo=algo,
+#         name=f'test-{algo}',
+#         input_movie_path=input_movie_path,
+#         params=test_params[algo]
+#     )
 
-    assert df.iloc[-1]['algo'] == algo
-    assert df.iloc[-1]['name'] == f'test-{algo}'
-    assert df.iloc[-1]['params'] == test_params[algo]
-    assert df.iloc[-1]['outputs'] is None
-    try:
-        UUID(df.iloc[-1]['uuid'])
-    except:
-        pytest.fail("Something wrong with setting UUID for batch items")
+#     assert df.iloc[-1]['algo'] == algo
+#     assert df.iloc[-1]['name'] == f'test-{algo}'
+#     assert df.iloc[-1]['params'] == test_params[algo]
+#     assert df.iloc[-1]['outputs'] is None
+#     try:
+#         UUID(df.iloc[-1]['uuid'])
+#     except:
+#         pytest.fail("Something wrong with setting UUID for batch items")
 
-    assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
-                  vid_dir.joinpath(f"{algo}.tif") == \
-                  vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
+#     assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
+#                   vid_dir.joinpath(f"{algo}.tif") == \
+#                   vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
 
-    df.caiman.add_item(
-        algo=algo,
-        name=f'test1-{algo}',
-        input_movie_path=input_movie_path,
-        params=test_params[algo]
-    )
+#     df.caiman.add_item(
+#         algo=algo,
+#         name=f'test1-{algo}',
+#         input_movie_path=input_movie_path,
+#         params=test_params[algo]
+#     )
 
-    assert df.iloc[-1]['algo'] == algo
-    assert df.iloc[-1]['name'] == f'test1-{algo}'
-    assert df.iloc[-1]['params'] == test_params[algo]
-    assert df.iloc[-1]['outputs'] is None
-    try:
-        UUID(df.iloc[-1]['uuid'])
-    except:
-        pytest.fail("Something wrong with setting UUID for batch items")
+#     assert df.iloc[-1]['algo'] == algo
+#     assert df.iloc[-1]['name'] == f'test1-{algo}'
+#     assert df.iloc[-1]['params'] == test_params[algo]
+#     assert df.iloc[-1]['outputs'] is None
+#     try:
+#         UUID(df.iloc[-1]['uuid'])
+#     except:
+#         pytest.fail("Something wrong with setting UUID for batch items")
 
-    assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
-                  vid_dir.joinpath(f"{algo}.tif") == \
-                  vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
-    # Check removing specific rows works
-    assert df.iloc[0]['name'] == f'test-{algo}'
-    assert df.iloc[1]['name'] == f'test1-{algo}'
-    assert df.empty == False
-    df.caiman.remove_item(index = 1)
-    assert df.iloc[0]['name'] == f'test-{algo}'
-    assert df.isin([f'test1-{algo}']).any().any() == False
-    assert df.empty == False
-    df.caiman.remove_item(index=0)
-    assert df.isin([f'test-{algo}']).any().any() == False
-    assert df.isin([f'test1-{algo}']).any().any() == False
-    assert df.empty == True
+#     assert get_full_data_path(df.iloc[-1]['input_movie_path']) == \
+#                   vid_dir.joinpath(f"{algo}.tif") == \
+#                   vid_dir.joinpath(df.iloc[-1]['input_movie_path'])
+#     # Check removing specific rows works
+#     assert df.iloc[0]['name'] == f'test-{algo}'
+#     assert df.iloc[1]['name'] == f'test1-{algo}'
+#     assert df.empty == False
+#     df.caiman.remove_item(index = 1)
+#     assert df.iloc[0]['name'] == f'test-{algo}'
+#     assert df.isin([f'test1-{algo}']).any().any() == False
+#     assert df.empty == False
+#     df.caiman.remove_item(index=0)
+#     assert df.isin([f'test-{algo}']).any().any() == False
+#     assert df.isin([f'test1-{algo}']).any().any() == False
+#     assert df.empty == True
