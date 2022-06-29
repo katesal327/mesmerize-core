@@ -19,6 +19,7 @@ from ..batch_utils import (
     HAS_PYQT,
 )
 from ..utils import validate_path, IS_WINDOWS, make_runfile, warning_experimental
+from ..movie_readers import MovieReader
 
 if HAS_PYQT:
     from PyQt5 import QtCore
@@ -267,7 +268,11 @@ class CaimanSeriesExtensions:
         return self._series.paths.resolve(self._series["input_movie_path"])
 
     @warning_experimental()
-    def get_input_movie(self) -> Union[np.ndarray, pims.FramesSequence]:
+    def get_input_movie(self, reader: str = None) -> Union[np.ndarray, pims.FramesSequence]:
+        if reader is not None:
+            Reader = MovieReader().get_reader(reader)
+            return Reader(self.get_input_movie_path())
+
         extension = self.get_input_movie_path().suffixes[-1]
 
         if extension in ['.tiff', '.tif', '.btf']:
