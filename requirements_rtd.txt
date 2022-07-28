@@ -1,0 +1,14 @@
+pandas
+pytest
+requests
+tqdm
+setuptools
+wheel
+numpy
+QtPy
+matplotlib
+click
+psutil
+PyQt5
+pims
+git+https://github.com/flatironinstitute/CaImAn.git
